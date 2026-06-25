@@ -452,11 +452,28 @@ paths:
       operationId: postConnections
       summary: POST /api/v1/connections
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                connectorId:
+                  type: string
+                  example: 9794c640-87cf-4e8f-9eed-6da4b477143e
+                authMethodId:
+                  type: string
+                  example: auth_2ba940ea6f6a
+                credentials:
+                  type: object
+              required:
+              - connectorId
+              - authMethodId
+              - credentials
+            example:
+              connectorId: 9794c640-87cf-4e8f-9eed-6da4b477143e
+              authMethodId: auth_2ba940ea6f6a
+              credentials: {}
       responses:
         '201':
           description: Created
@@ -526,16 +543,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: MyEnvironment
+                  description: Must be unique per org - do not reuse a static
+                    example value across scan runs, it will collide with the
+                    environment created by the previous run and return 400.
                 slug:
                   type: string
-                  example: myenvironment01
+                  description: Must be unique per org - same collision risk
+                    as name.
               required:
               - name
               - slug
-            example:
-              name: MyEnvironment
-              slug: myenvironment01
   /api/v1/events:
     get:
       tags:
@@ -847,10 +864,13 @@ paths:
               properties:
                 name:
                   type: string
-                  example: backup
+                  description: Must be unique per org - do not reuse a static
+                    example value across scan runs, it will collide with the
+                    org created by the previous run and return 400.
                 slug:
                   type: string
-                  example: backup
+                  description: Must be unique per org - same collision risk
+                    as name.
                 plan:
                   type: string
                   example: free
@@ -866,17 +886,6 @@ paths:
               required:
               - name
               - slug
-              - plan
-              - tier
-              - parentId
-              - external_ref
-            example:
-              name: backup
-              slug: backup
-              plan: free
-              tier: tenant
-              parentId: personal_joelmiller890321-gmail
-              external_ref: '123456'
   /api/v1/orgs/{orgId}:
     get:
       tags:
@@ -1191,7 +1200,9 @@ paths:
               properties:
                 name:
                   type: string
-                  example: POC Owner Role 001
+                  description: Must be unique per org - do not reuse a static
+                    example value across scan runs, it will collide with the
+                    role created by the previous run and return 400.
                 description:
                   type: string
                   example: poc
@@ -1206,13 +1217,6 @@ paths:
               required:
               - name
               - permissions
-            example:
-              name: POC Owner Role 001
-              description: poc
-              permissions:
-                connectors:
-                  actions:
-                  - read
       responses:
         '201':
           description: Created
@@ -1351,17 +1355,16 @@ paths:
                 name:
                   type: string
                   pattern: ^[A-Z][A-Z0-9_]{0,99}$
-                  description: Must be UPPER_SNAKE_CASE, max 100 chars.
-                  example: CREATESECRET
+                  description: Must be UPPER_SNAKE_CASE, max 100 chars, and unique
+                    per org - do not reuse a static example value across scan
+                    runs, it will collide with the secret created by the previous
+                    run and return 409/400.
                 value:
                   type: string
                   example: '123456789'
               required:
               - name
               - value
-            example:
-              name: CREATESECRET
-              value: '123456789'
   /api/v1/sync/jobs:
     get:
       tags:
@@ -1532,27 +1535,6 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    delete:
-      tags:
-      - users
-      operationId: deleteUsersUserId
-      summary: DELETE /api/v1/users/{userId}
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/webhooks:
     get:
       tags:
@@ -1676,31 +1658,6 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    delete:
-      tags:
-      - webhooks
-      operationId: deleteWebhooksId
-      summary: DELETE /api/v1/webhooks/{id}
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: One-shot disposable seed webhook - this ID is consumed once
-          DELETE succeeds. Re-create PerfAI_BFLA_Seed_Webhook_DELETE and update
-          this example before/after each scan cycle that needs a fresh DELETE
-          confirmation. Never point this at a real, in-use webhook.
-        example: c987b2c5-0933-42cb-bfb8-7abb8ee97cbf
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/widgets:
     get:
       tags:
@@ -1722,11 +1679,36 @@ paths:
       operationId: postWidgets
       summary: POST /api/v1/widgets
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                name:
+                  type: string
+                  example: Slack
+                connector_ids:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - 9794c640-87cf-4e8f-9eed-6da4b477143e
+                sync_direction:
+                  type: string
+                  example: bidirectional
+                agent_context:
+                  type: string
+                  example: '{"scope":"org"}'
+              required:
+              - name
+              - connector_ids
+            example:
+              name: Slack
+              connector_ids:
+              - 9794c640-87cf-4e8f-9eed-6da4b477143e
+              sync_direction: bidirectional
+              agent_context: '{"scope":"org"}'
       responses:
         '201':
           description: Created
@@ -1925,51 +1907,6 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    put:
-      tags:
-      - agent/orchestrator
-      operationId: putAgentWorkflowBuilderStandaloneStream
-      summary: PUT /api/v1/agent/workflow-builder-standalone/stream
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Wrkfl115
-                code:
-                  type: string
-                enabled:
-                  type: boolean
-                  example: true
-                executionTier:
-                  type: string
-                  example: instant
-                timeoutMs:
-                  type: integer
-                  example: 60000
-              required:
-              - name
-              - code
-            example:
-              name: Wrkfl115
-              code: 'export default async function(ctx) { return { result: "Hello"
-                }; }'
-              enabled: true
-              executionTier: instant
-              timeoutMs: 60000
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/alerts/{alertId}:
     get:
       tags:
@@ -1982,7 +1919,7 @@ paths:
         required: true
         schema:
           type: string
-        example: alert_901f1de572cf
+        example: alert_8a89228de86b
       responses:
         '200':
           description: OK
@@ -2028,27 +1965,6 @@ paths:
               name: RTRDS
               condition: error_rate
               threshold: 10
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
-    delete:
-      tags:
-      - alerts
-      operationId: deleteAlertsAlertId
-      summary: DELETE /api/v1/alerts/{alertId}
-      parameters:
-      - name: alertId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: alert_f3a5d8e27fda
       responses:
         '200':
           description: OK
@@ -2145,27 +2061,6 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    delete:
-      tags:
-      - connectors
-      operationId: deleteConnectorsConnectorId
-      summary: DELETE /api/v1/connectors/{connectorId}
-      parameters:
-      - name: connectorId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: 984a536a-b052-4bd0-a97d-4db7a1054f24
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/connectors/{connectorId}/export:
     get:
       tags:
@@ -2195,11 +2090,68 @@ paths:
       operationId: postConnectorsImport
       summary: POST /api/v1/connectors/import
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
+              description: Single connector-bundle object (the same shape
+                returned by GET /api/v1/connectors/{connectorId}/export) -
+                not an array, not wrapped in a "bundles" key.
+              properties:
+                $schema:
+                  type: string
+                  example: https://fastn.ai/schemas/connector-bundle/v1.json
+                version:
+                  type: string
+                  example: '1.0'
+                connector:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Must be unique per org - do not reuse a
+                        static example value across scan runs.
+                    slug:
+                      type: string
+                      description: Must be unique per org - same collision
+                        risk as name.
+                    category:
+                      type: string
+                      example: Custom
+                    authMethods:
+                      type: array
+                      items:
+                        type: object
+                      example:
+                      - id: auth_seed001
+                        type: NO_AUTH
+                        title: No Auth
+                        isDefault: true
+                        inputContract:
+                          type: object
+                          required: []
+                          properties: {}
+                        authConfig: {}
+                  required:
+                  - category
+                actions:
+                  type: array
+                  items:
+                    type: object
+                  example: []
+                webhookConfigs:
+                  type: array
+                  items:
+                    type: object
+                  example: []
+                authProviders:
+                  type: array
+                  items:
+                    type: object
+                  example: []
+              required:
+              - connector
       responses:
         '200':
           description: OK
@@ -2221,7 +2173,7 @@ paths:
         required: true
         schema:
           type: string
-        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
       - name: limit
         in: query
         required: true
@@ -2244,11 +2196,27 @@ paths:
       operationId: postEmbedToken
       summary: POST /api/v1/embed/token
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
+              description: endOrgId is required unless allowOrgLevel is true.
+                A bare {} body returns 400 EMBED_TOKEN_REQUIRES_END_ORG_ID -
+                this only worked with an empty body in the browser because
+                the session implicitly carried an org context; a Bearer-token
+                caller has no such default.
+              properties:
+                endOrgId:
+                  type: string
+                  example: 54bc0a1c-5a65-44fb-a169-f2d0ed73b954
+                allowOrgLevel:
+                  type: boolean
+                  description: Set true instead of endOrgId for an org-level
+                    (partner/admin-preview) token.
+                  example: false
+            example:
+              endOrgId: 54bc0a1c-5a65-44fb-a169-f2d0ed73b954
       responses:
         '200':
           description: OK
@@ -2381,30 +2349,6 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    delete:
-      tags:
-      - roles
-      operationId: deleteRolesRoleId
-      summary: DELETE /api/v1/roles/{roleId}
-      parameters:
-      - name: roleId
-        in: path
-        required: true
-        schema:
-          type: string
-        description: Intentionally left as a non-existent placeholder - this method
-          was not part of the verified BFLA findings, and pointing it at a real
-          role/seed role would destroy it on the first scan run.
-        example: role_abc123
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/schedulers/{schedulerId}:
     get:
       tags:
@@ -2488,53 +2432,7 @@ paths:
                 type: object
         '401':
           description: Unauthorized
-    delete:
-      tags:
-      - schedulers
-      operationId: deleteSchedulersSchedulerId
-      summary: DELETE /api/v1/schedulers/{schedulerId}
-      parameters:
-      - name: schedulerId
-        in: path
-        required: true
-        schema:
-          type: string
-        description: Intentionally left as a non-existent placeholder - this method
-          was not part of the verified BFLA findings, and pointing it at the same
-          scheduler used by PUT/trigger would delete it and break those tests on
-          subsequent runs.
-        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
   /api/v1/schedulers/{schedulerId}/trigger:
-    get:
-      tags:
-      - schedulers
-      operationId: getSchedulersSchedulerIdTrigger
-      summary: GET /api/v1/schedulers/{schedulerId}/trigger
-      parameters:
-      - name: schedulerId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
     post:
       tags:
       - schedulers
@@ -2575,7 +2473,7 @@ paths:
         required: true
         schema:
           type: string
-        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
       responses:
         '200':
           description: OK
@@ -2591,28 +2489,6 @@ paths:
       - users
       operationId: getUsersMeMemberships
       summary: GET /api/v1/users/me/memberships
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
-  /api/v1/widgets/{widgetId}:
-    delete:
-      tags:
-      - widgets
-      operationId: deleteWidgetsWidgetId
-      summary: DELETE /api/v1/widgets/{widgetId}
-      parameters:
-      - name: widgetId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: widget_abc123
       responses:
         '200':
           description: OK
@@ -2712,27 +2588,6 @@ paths:
               enabled: true
               executionTier: instant
               timeoutMs: 60000
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
-          description: Unauthorized
-    delete:
-      tags:
-      - workflows
-      operationId: deleteWorkflowsWorkflowId
-      summary: DELETE /api/v1/workflows/{workflowId}
-      parameters:
-      - name: workflowId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: wf_1fe4fa99b497
       responses:
         '200':
           description: OK
@@ -2975,7 +2830,10 @@ paths:
         required: true
         schema:
           type: string
-        example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+        description: Must be a real member of the caller's own org - 43dde5fa-...
+          belongs to a different org and returns 404 for every role including
+          Owner, which made this look like a false BFLA bypass.
+        example: 16b39e40-0077-4e89-b7cf-83ea2331e75b
       requestBody:
         required: true
         content:
