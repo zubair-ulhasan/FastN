@@ -1,0 +1,3010 @@
+openapi: 3.0.3
+info:
+  title: Fastn API
+  description: REST API for the Fastn platform (live.gcp.fastn.ai). Generated from
+    HAR network capture.
+  version: v2
+  contact:
+    url: https://fastn.ai
+servers:
+- url: https://live.gcp.fastn.ai
+  description: Production (GCP)
+tags:
+- name: activity
+- name: agent/onboarding
+- name: agent/orchestrator
+- name: alerts
+- name: api-keys
+- name: app-triggers
+- name: audit-log
+- name: auth-providers
+- name: connections
+- name: connectors
+- name: environments
+- name: events
+- name: hub-settings
+- name: me
+- name: onboarding
+- name: orgs
+- name: plan-change-requests
+- name: plans
+- name: platform-providers
+- name: profile
+- name: quotas
+- name: roles
+- name: schedulers
+- name: secrets
+- name: sync
+- name: traces
+- name: usage
+- name: users
+- name: webhooks
+- name: widgets
+- name: workflows
+paths:
+  /api/v1/activity/page:
+    post:
+      tags:
+      - activity
+      operationId: postActivityPage
+      summary: POST /api/v1/activity/page
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: string
+                  example: /profile
+              required:
+              - page
+            example:
+              page: /profile
+  /api/v1/agent/onboarding/research-report:
+    get:
+      tags:
+      - agent/onboarding
+      operationId: getAgentOnboardingResearchReport
+      summary: GET /api/v1/agent/onboarding/research-report
+      parameters:
+      - name: domain
+        in: query
+        required: true
+        schema:
+          type: string
+        example: joelsapp.com
+      responses:
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/agent/onboarding/start:
+    post:
+      tags:
+      - agent/onboarding
+      operationId: postAgentOnboardingStart
+      summary: POST /api/v1/agent/onboarding/start
+      responses:
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                domain:
+                  type: string
+                  example: joelsapp.com
+              required:
+              - domain
+            example:
+              domain: joelsapp.com
+  /api/v1/agent/onboarding/status:
+    get:
+      tags:
+      - agent/onboarding
+      operationId: getAgentOnboardingStatus
+      summary: GET /api/v1/agent/onboarding/status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/agent/orchestrator/sessions:
+    get:
+      tags:
+      - agent/orchestrator
+      operationId: getAgentOrchestratorSessions
+      summary: GET /api/v1/agent/orchestrator/sessions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/agent/orchestrator/state:
+    get:
+      tags:
+      - agent/orchestrator
+      operationId: getAgentOrchestratorState
+      summary: GET /api/v1/agent/orchestrator/state
+      parameters:
+      - name: threadId
+        in: query
+        required: true
+        schema:
+          type: string
+        example: orch_mq90nukv_yrbp
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/agent/orchestrator/stream:
+    post:
+      tags:
+      - agent/orchestrator
+      operationId: postAgentOrchestratorStream
+      summary: POST /api/v1/agent/orchestrator/stream
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: integration with github
+              required:
+              - message
+            example:
+              message: integration with github
+    get:
+      tags:
+      - agent/orchestrator
+      operationId: getAgentOrchestratorStream
+      summary: GET /api/v1/agent/orchestrator/stream
+      parameters:
+      - name: threadId
+        in: query
+        required: true
+        schema:
+          type: string
+        example: orch_mq90nukv_yrbp
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/alerts:
+    get:
+      tags:
+      - alerts
+      operationId: getAlerts
+      summary: GET /api/v1/alerts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - alerts
+      operationId: postAlerts
+      summary: POST /api/v1/alerts
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Alert01
+                condition:
+                  type: string
+                  example: latency_p99
+                threshold:
+                  type: integer
+                  example: 5
+              required:
+              - name
+              - condition
+              - threshold
+            example:
+              name: Alert01
+              condition: latency_p99
+              threshold: 5
+  /api/v1/api-keys:
+    get:
+      tags:
+      - api-keys
+      operationId: getApiKeys
+      summary: GET /api/v1/api-keys
+      parameters:
+      - name: mode
+        in: query
+        required: true
+        schema:
+          type: string
+        example: live
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - api-keys
+      operationId: postApiKeys
+      summary: POST /api/v1/api-keys
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Create API Key
+                mode:
+                  type: string
+                  example: live
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  example: []
+                environment:
+                  type: string
+                  example: production
+              required:
+              - name
+              - mode
+              - permissions
+              - environment
+            example:
+              name: Create API Key
+              mode: live
+              permissions: []
+              environment: production
+  /api/v1/app-triggers:
+    get:
+      tags:
+      - app-triggers
+      operationId: getAppTriggers
+      summary: GET /api/v1/app-triggers
+      parameters:
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: '8'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/audit-log:
+    get:
+      tags:
+      - audit-log
+      operationId: getAuditLog
+      summary: GET /api/v1/audit-log
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/audit-log/actions:
+    get:
+      tags:
+      - audit-log
+      operationId: getAuditLogActions
+      summary: GET /api/v1/audit-log/actions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/auth-providers:
+    get:
+      tags:
+      - auth-providers
+      operationId: getAuthProviders
+      summary: GET /api/v1/auth-providers
+      parameters:
+      - name: connectorId
+        in: query
+        required: true
+        schema:
+          type: string
+        example: 403d3efe-f8c9-4e35-acc7-2100b3b86c14
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/connections:
+    get:
+      tags:
+      - connections
+      operationId: getConnections
+      summary: GET /api/v1/connections
+      parameters:
+      - name: status
+        in: query
+        required: true
+        schema:
+          type: string
+        example: ACTIVE
+      - name: orgId
+        in: query
+        required: true
+        schema:
+          type: string
+        example: bb5a70d2-5163-4d50-8d07-8ece6735f5f3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - connections
+      operationId: postConnections
+      summary: POST /api/v1/connections
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/connectors:
+    get:
+      tags:
+      - connectors
+      operationId: getConnectors
+      summary: GET /api/v1/connectors
+      parameters:
+      - name: deleted
+        in: query
+        required: true
+        schema:
+          type: string
+        example: 'true'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/environments:
+    get:
+      tags:
+      - environments
+      operationId: getEnvironments
+      summary: GET /api/v1/environments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - environments
+      operationId: postEnvironments
+      summary: POST /api/v1/environments
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: MyEnvironment
+                slug:
+                  type: string
+                  example: myenvironment01
+              required:
+              - name
+              - slug
+            example:
+              name: MyEnvironment
+              slug: myenvironment01
+  /api/v1/events:
+    get:
+      tags:
+      - events
+      operationId: getEvents
+      summary: GET /api/v1/events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/hub-settings:
+    get:
+      tags:
+      - hub-settings
+      operationId: getHubSettings
+      summary: GET /api/v1/hub-settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - hub-settings
+      operationId: putHubSettings
+      summary: PUT /api/v1/hub-settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  example:
+                    sections:
+                    - id: header
+                      type: header
+                      label: Header & Branding
+                      enabled: true
+                      order: 0
+                    - id: ai_chat
+                      type: ai_chat
+                      label: AI Assistant
+                      enabled: true
+                      order: 1
+                    - id: search
+                      type: search
+                      label: Search Bar
+                      enabled: true
+                      order: 2
+                    - id: integrations
+                      type: integrations
+                      label: Apps
+                      enabled: true
+                      order: 3
+                    - id: workflows
+                      type: workflows
+                      label: Workflows
+                      enabled: true
+                      order: 4
+                    - id: insights
+                      type: connections
+                      label: Insights
+                      enabled: true
+                      order: 5
+                    tokens:
+                      primary: '#8f85e8'
+                      primaryForeground: '#fff'
+                      background: '#1a1918'
+                      foreground: '#e3e1da'
+                      card: '#222120'
+                      muted: '#2b2a27'
+                      mutedForeground: '#8a8780'
+                      border: '#2b2a27'
+                      fontFamily: Inter, sans-serif
+                      fontSize: 14
+                      fontWeight: '400'
+                      letterSpacing: normal
+                      radius: 8
+                      buttonRadius: 8
+                      inputRadius: 6
+                      shadowStrength: md
+                    headerTitle: Integrations
+                    headerSubtitle: Connect your favorite tools
+                    templates:
+                    - id: t1
+                      name: Generate discovery deck in Gamma when HubSpot deal enters
+                        Discovery stage
+                      category: Sales
+                    - id: t2
+                      name: Create Gamma competitor analysis deck and write link back
+                        to HubSpot deal
+                      category: Sales
+                    showCommunityConnectors: false
+                    featuredConnectorIds: []
+              required:
+              - config
+            example:
+              config:
+                sections:
+                - id: header
+                  type: header
+                  label: Header & Branding
+                  enabled: true
+                  order: 0
+                - id: ai_chat
+                  type: ai_chat
+                  label: AI Assistant
+                  enabled: true
+                  order: 1
+                - id: search
+                  type: search
+                  label: Search Bar
+                  enabled: true
+                  order: 2
+                - id: integrations
+                  type: integrations
+                  label: Apps
+                  enabled: true
+                  order: 3
+                - id: workflows
+                  type: workflows
+                  label: Workflows
+                  enabled: true
+                  order: 4
+                - id: insights
+                  type: connections
+                  label: Insights
+                  enabled: true
+                  order: 5
+                tokens:
+                  primary: '#8f85e8'
+                  primaryForeground: '#fff'
+                  background: '#1a1918'
+                  foreground: '#e3e1da'
+                  card: '#222120'
+                  muted: '#2b2a27'
+                  mutedForeground: '#8a8780'
+                  border: '#2b2a27'
+                  fontFamily: Inter, sans-serif
+                  fontSize: 14
+                  fontWeight: '400'
+                  letterSpacing: normal
+                  radius: 8
+                  buttonRadius: 8
+                  inputRadius: 6
+                  shadowStrength: md
+                headerTitle: Integrations
+                headerSubtitle: Connect your favorite tools
+                templates:
+                - id: t1
+                  name: Generate discovery deck in Gamma when HubSpot deal enters
+                    Discovery stage
+                  category: Sales
+                - id: t2
+                  name: Create Gamma competitor analysis deck and write link back
+                    to HubSpot deal
+                  category: Sales
+                showCommunityConnectors: false
+                featuredConnectorIds: []
+  /api/v1/me/entitlements:
+    get:
+      tags:
+      - me
+      operationId: getMeEntitlements
+      summary: GET /api/v1/me/entitlements
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/onboarding:
+    get:
+      tags:
+      - onboarding
+      operationId: getOnboarding
+      summary: GET /api/v1/onboarding
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/onboarding/agent-domain:
+    post:
+      tags:
+      - onboarding
+      operationId: postOnboardingAgentDomain
+      summary: POST /api/v1/onboarding/agent-domain
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                domain:
+                  type: string
+                  example: joelsapp.com
+              required:
+              - domain
+            example:
+              domain: joelsapp.com
+  /api/v1/onboarding/status:
+    get:
+      tags:
+      - onboarding
+      operationId: getOnboardingStatus
+      summary: GET /api/v1/onboarding/status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/orgs:
+    get:
+      tags:
+      - orgs
+      operationId: getOrgs
+      summary: GET /api/v1/orgs
+      parameters:
+      - name: tier
+        in: query
+        required: true
+        schema:
+          type: string
+        example: tenant
+      - name: parent_id
+        in: query
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      - name: parent
+        in: query
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - orgs
+      operationId: postOrgs
+      summary: POST /api/v1/orgs
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: backup
+                slug:
+                  type: string
+                  example: backup
+                plan:
+                  type: string
+                  example: free
+                tier:
+                  type: string
+                  example: tenant
+                parentId:
+                  type: string
+                  example: personal_joelmiller890321-gmail
+                external_ref:
+                  type: string
+                  example: '123456'
+              required:
+              - name
+              - slug
+              - plan
+              - tier
+              - parentId
+              - external_ref
+            example:
+              name: backup
+              slug: backup
+              plan: free
+              tier: tenant
+              parentId: personal_joelmiller890321-gmail
+              external_ref: '123456'
+  /api/v1/orgs/{orgId}:
+    get:
+      tags:
+      - orgs
+      operationId: getOrgsOrgid
+      summary: GET /api/v1/orgs/{orgId}
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - orgs
+      operationId: putOrgsId
+      summary: PUT /api/v1/orgs/{id}
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: bb5a70d2-5163-4d50-8d07-8ece6735f5f3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                adminEmail:
+                  type: string
+                  example: backupemail.seyada1@gmail.com
+                adminUserId:
+                  type: string
+                  example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+              required:
+              - adminEmail
+              - adminUserId
+            example:
+              adminEmail: backupemail.seyada1@gmail.com
+              adminUserId: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+  /api/v1/orgs/{orgId}/config:
+    get:
+      tags:
+      - orgs
+      operationId: getOrgsOrgidConfig
+      summary: GET /api/v1/orgs/{orgId}/config
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/orgs/{orgId}/settings:
+    get:
+      tags:
+      - orgs
+      operationId: getOrgsOrgidSettings
+      summary: GET /api/v1/orgs/{orgId}/settings
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - orgs
+      operationId: putOrgsOrgidSettings
+      summary: PUT /api/v1/orgs/{orgId}/settings
+      parameters:
+      - name: orgId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: personal_joelmiller890321-gmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                domain:
+                  type: string
+                  nullable: true
+                  example: null
+                autoApproveDomain:
+                  type: boolean
+                  example: false
+                defaultMemberRole:
+                  type: string
+                  example: developer
+              required:
+              - domain
+              - autoApproveDomain
+              - defaultMemberRole
+            example:
+              domain: null
+              autoApproveDomain: false
+              defaultMemberRole: developer
+  /api/v1/plan-change-requests/me:
+    get:
+      tags:
+      - plan-change-requests
+      operationId: getPlanChangeRequestsMe
+      summary: GET /api/v1/plan-change-requests/me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/plans:
+    get:
+      tags:
+      - plans
+      operationId: getPlans
+      summary: GET /api/v1/plans
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/platform-providers:
+    get:
+      tags:
+      - platform-providers
+      operationId: getPlatformProviders
+      summary: GET /api/v1/platform-providers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/profile:
+    get:
+      tags:
+      - profile
+      operationId: getProfile
+      summary: GET /api/v1/profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - profile
+      operationId: putProfile
+      summary: PUT /api/v1/profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: Joell
+                lastName:
+                  type: string
+                  example: Miller
+                jobTitle:
+                  type: string
+                  example: ''
+                timezone:
+                  type: string
+                  example: Asia/Calcutta
+              required:
+              - firstName
+              - lastName
+              - jobTitle
+              - timezone
+            example:
+              firstName: Joell
+              lastName: Miller
+              jobTitle: ''
+              timezone: Asia/Calcutta
+  /api/v1/profile/security:
+    get:
+      tags:
+      - profile
+      operationId: getProfileSecurity
+      summary: GET /api/v1/profile/security
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/quotas:
+    get:
+      tags:
+      - quotas
+      operationId: getQuotas
+      summary: GET /api/v1/quotas
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/roles:
+    get:
+      tags:
+      - roles
+      operationId: getRoles
+      summary: GET /api/v1/roles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - roles
+      operationId: postRoles
+      summary: POST /api/v1/roles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: POC Owner Role 001
+                description:
+                  type: string
+                  example: poc
+                permissions:
+                  type: object
+                  description: Map of resource name (e.g. connectors) to an actions
+                    list. At least one resource is required.
+                  example:
+                    connectors:
+                      actions:
+                      - read
+              required:
+              - name
+              - permissions
+            example:
+              name: POC Owner Role 001
+              description: poc
+              permissions:
+                connectors:
+                  actions:
+                  - read
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/schedulers:
+    get:
+      tags:
+      - schedulers
+      operationId: getSchedulers
+      summary: GET /api/v1/schedulers
+      parameters:
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: '8'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - schedulers
+      operationId: postSchedulers
+      summary: POST /api/v1/schedulers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: tttrtete
+                rate:
+                  type: object
+                  properties:
+                    value:
+                      type: integer
+                      example: 5
+                    unit:
+                      type: string
+                      example: minutes
+                timezone:
+                  type: string
+                  example: Asia/Calcutta
+                delayMinutes:
+                  type: integer
+                  example: 0
+                routes:
+                  type: array
+                  items:
+                    type: object
+                dlqConfiguration:
+                  type: object
+                  properties:
+                    maxRetries:
+                      type: integer
+                      example: 0
+                    backoffStrategy:
+                      type: string
+                      example: exponential
+              required:
+              - name
+            example:
+              name: tttrtete
+              rate:
+                value: 5
+                unit: minutes
+              timezone: Asia/Calcutta
+              delayMinutes: 0
+              routes:
+              - routeId: wrkfl1
+                headers: {}
+                payload: {}
+              dlqConfiguration:
+                maxRetries: 0
+                backoffStrategy: exponential
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/secrets:
+    get:
+      tags:
+      - secrets
+      operationId: getSecrets
+      summary: GET /api/v1/secrets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - secrets
+      operationId: postSecrets
+      summary: POST /api/v1/secrets
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  pattern: ^[A-Z][A-Z0-9_]{0,99}$
+                  description: Must be UPPER_SNAKE_CASE, max 100 chars.
+                  example: CREATESECRET
+                value:
+                  type: string
+                  example: '123456789'
+              required:
+              - name
+              - value
+            example:
+              name: CREATESECRET
+              value: '123456789'
+  /api/v1/sync/jobs:
+    get:
+      tags:
+      - sync
+      operationId: getSyncJobs
+      summary: GET /api/v1/sync/jobs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/traces:
+    get:
+      tags:
+      - traces
+      operationId: getTraces
+      summary: GET /api/v1/traces
+      responses:
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/usage:
+    get:
+      tags:
+      - usage
+      operationId: getUsage
+      summary: GET /api/v1/usage
+      parameters:
+      - name: end_org_id
+        in: query
+        required: true
+        schema:
+          type: string
+        example: current
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/usage/ai:
+    get:
+      tags:
+      - usage
+      operationId: getUsageAi
+      summary: GET /api/v1/usage/ai
+      parameters:
+      - name: scope
+        in: query
+        required: true
+        schema:
+          type: string
+        example: org
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/users:
+    get:
+      tags:
+      - users
+      operationId: getUsers
+      summary: GET /api/v1/users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/users/invite:
+    post:
+      tags:
+      - users
+      operationId: postUsersInvite
+      summary: POST /api/v1/users/invite
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: backupemail.seyada1@gmail.com
+                role:
+                  type: string
+                  example: admin
+                orgId:
+                  type: string
+                  example: personal_joelmiller890321-gmail
+                endOrgId:
+                  type: string
+                  example: bb5a70d2-5163-4d50-8d07-8ece6735f5f3
+              required:
+              - email
+              - role
+              - orgId
+              - endOrgId
+            example:
+              email: backupemail.seyada1@gmail.com
+              role: admin
+              orgId: personal_joelmiller890321-gmail
+              endOrgId: bb5a70d2-5163-4d50-8d07-8ece6735f5f3
+  /api/v1/users/pending:
+    get:
+      tags:
+      - users
+      operationId: getUsersPending
+      summary: GET /api/v1/users/pending
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - users
+      operationId: getUsersId
+      summary: GET /api/v1/users/{id}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - users
+      operationId: deleteUsersUserId
+      summary: DELETE /api/v1/users/{userId}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/webhooks:
+    get:
+      tags:
+      - webhooks
+      operationId: getWebhooks
+      summary: GET /api/v1/webhooks
+      parameters:
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: '8'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - webhooks
+      operationId: postWebhooks
+      summary: POST /api/v1/webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: poc_enduser_BFLA_test
+                authMethod:
+                  type: string
+                  example: API_KEY
+                routeExecutionMode:
+                  type: string
+                  example: parallel
+                routes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      routeId:
+                        type: string
+                        example: poc1
+                      routeType:
+                        type: string
+                        example: API
+                      headers:
+                        type: object
+                      payload:
+                        type: object
+              required:
+              - name
+              - routes
+            example:
+              name: poc_enduser_BFLA_test
+              authMethod: API_KEY
+              routeExecutionMode: parallel
+              routes:
+              - routeId: poc1
+                routeType: API
+                headers: {}
+                payload: {}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/webhooks/{id}:
+    put:
+      tags:
+      - webhooks
+      operationId: putWebhooksId
+      summary: PUT /api/v1/webhooks/{id}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Use a disposable seed webhook for automated testing - do not
+          point this at a real, in-use webhook since RBAC/BFLA scans will rename
+          and toggle its status on every run.
+        example: 7a4d84bb-1797-42dd-8e7c-5415a3ed2065
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Partial update - at least one field must be present.
+              properties:
+                name:
+                  type: string
+                  example: PerfAI_BFLA_Seed_Webhook_PUT
+                status:
+                  type: string
+                  enum:
+                  - ACTIVE
+                  - DISABLED
+                  example: DISABLED
+            example:
+              status: DISABLED
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - webhooks
+      operationId: deleteWebhooksId
+      summary: DELETE /api/v1/webhooks/{id}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: One-shot disposable seed webhook - this ID is consumed once
+          DELETE succeeds. Re-create PerfAI_BFLA_Seed_Webhook_DELETE and update
+          this example before/after each scan cycle that needs a fresh DELETE
+          confirmation. Never point this at a real, in-use webhook.
+        example: c987b2c5-0933-42cb-bfb8-7abb8ee97cbf
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/widgets:
+    get:
+      tags:
+      - widgets
+      operationId: getWidgets
+      summary: GET /api/v1/widgets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - widgets
+      operationId: postWidgets
+      summary: POST /api/v1/widgets
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/widgets/insights:
+    get:
+      tags:
+      - widgets
+      operationId: getWidgetsInsights
+      summary: GET /api/v1/widgets/insights
+      parameters:
+      - name: range
+        in: query
+        required: true
+        schema:
+          type: string
+        example: 7d
+      - name: tz
+        in: query
+        required: true
+        schema:
+          type: string
+        example: Asia/Calcutta
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows:
+    get:
+      tags:
+      - workflows
+      operationId: getWorkflows
+      summary: GET /api/v1/workflows
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflows
+      summary: POST /api/v1/workflows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                slug:
+                  type: string
+                  example: poc-owner-wf-001
+                name:
+                  type: string
+                  example: POC Owner Workflow 001
+                code:
+                  type: string
+                  example: export default async function(ctx){ return {ok:true}; }
+              required:
+              - slug
+              - name
+              - code
+            example:
+              slug: poc-owner-wf-001
+              name: POC Owner Workflow 001
+              code: export default async function(ctx){ return {ok:true}; }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/executions:
+    get:
+      tags:
+      - workflows
+      operationId: getWorkflowsExecutions
+      summary: GET /api/v1/workflows/executions
+      parameters:
+      - name: status
+        in: query
+        required: true
+        schema:
+          type: string
+        example: failed
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: '10'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/activity/track:
+    get:
+      tags:
+      - activity
+      operationId: getActivityTrack
+      summary: GET /api/v1/activity/track
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - activity
+      operationId: postActivityTrack
+      summary: POST /api/v1/activity/track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                  example: login
+                source:
+                  type: string
+                  example: dashboard
+                userAgent:
+                  type: string
+                  example: Mozilla/5.0
+              required:
+              - event
+            example:
+              event: login
+              source: dashboard
+              userAgent: Mozilla/5.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/agent/workflow-builder-standalone/stream:
+    post:
+      tags:
+      - agent/orchestrator
+      operationId: postAgentWorkflowBuilderStandaloneStream
+      summary: POST /api/v1/agent/workflow-builder-standalone/stream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Re-validate workflow
+              required:
+              - message
+            example:
+              message: Re-validate workflow
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - agent/orchestrator
+      operationId: putAgentWorkflowBuilderStandaloneStream
+      summary: PUT /api/v1/agent/workflow-builder-standalone/stream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Wrkfl115
+                code:
+                  type: string
+                enabled:
+                  type: boolean
+                  example: true
+                executionTier:
+                  type: string
+                  example: instant
+                timeoutMs:
+                  type: integer
+                  example: 60000
+              required:
+              - name
+              - code
+            example:
+              name: Wrkfl115
+              code: 'export default async function(ctx) { return { result: "Hello"
+                }; }'
+              enabled: true
+              executionTier: instant
+              timeoutMs: 60000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/alerts/{alertId}:
+    get:
+      tags:
+      - alerts
+      operationId: getAlertsAlertId
+      summary: GET /api/v1/alerts/{alertId}
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: alert_901f1de572cf
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - alerts
+      operationId: putAlertsAlertId
+      summary: PUT /api/v1/alerts/{alertId}
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: alert_cb950cc4d41e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: RTRDS
+                condition:
+                  type: string
+                  example: error_rate
+                threshold:
+                  type: integer
+                  example: 10
+              required:
+              - name
+              - condition
+              - threshold
+            example:
+              name: RTRDS
+              condition: error_rate
+              threshold: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - alerts
+      operationId: deleteAlertsAlertId
+      summary: DELETE /api/v1/alerts/{alertId}
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: alert_f3a5d8e27fda
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/actions:
+    get:
+      tags:
+      - workflows
+      operationId: getActions
+      summary: GET /api/v1/actions
+      parameters:
+      - name: deleted
+        in: query
+        required: true
+        schema:
+          type: string
+        example: 'true'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/audit-logs:
+    get:
+      tags:
+      - audit-log
+      operationId: getAuditLogs
+      summary: GET /api/v1/audit-logs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/connectors/{connectorId}:
+    put:
+      tags:
+      - connectors
+      operationId: putConnectorsConnectorId
+      summary: PUT /api/v1/connectors/{connectorId}
+      parameters:
+      - name: connectorId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 76b7fa39-6d60-4c08-aa0a-547ec5aa37d3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: TestCon
+                visibility:
+                  type: string
+                  example: private
+                protocol:
+                  type: string
+                  example: REST
+                authMethods:
+                  type: array
+                  items:
+                    type: object
+            example:
+              name: TestCon
+              visibility: private
+              protocol: REST
+              authMethods:
+              - type: OAUTH_2
+                title: OAuth 2.0
+                isDefault: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - connectors
+      operationId: deleteConnectorsConnectorId
+      summary: DELETE /api/v1/connectors/{connectorId}
+      parameters:
+      - name: connectorId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 984a536a-b052-4bd0-a97d-4db7a1054f24
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/connectors/{connectorId}/export:
+    get:
+      tags:
+      - connectors
+      operationId: getConnectorsConnectorIdExport
+      summary: GET /api/v1/connectors/{connectorId}/export
+      parameters:
+      - name: connectorId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 22783a20-4a6c-4279-b8bc-e63acca68308
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/connectors/import:
+    post:
+      tags:
+      - connectors
+      operationId: postConnectorsImport
+      summary: POST /api/v1/connectors/import
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/dlq:
+    get:
+      tags:
+      - schedulers
+      operationId: getDlq
+      summary: GET /api/v1/dlq
+      parameters:
+      - name: triggerId
+        in: query
+        required: true
+        schema:
+          type: string
+        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/embed/token:
+    post:
+      tags:
+      - auth-providers
+      operationId: postEmbedToken
+      summary: POST /api/v1/embed/token
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/oauth/initiate:
+    get:
+      tags:
+      - auth-providers
+      operationId: getOauthInitiate
+      summary: GET /api/v1/oauth/initiate
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - auth-providers
+      operationId: postOauthInitiate
+      summary: POST /api/v1/oauth/initiate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connectorId:
+                  type: string
+                  example: 8de5d696-5289-4c9c-ade4-de918d019d06
+                authMethodId:
+                  type: string
+                  example: 7195748d-a02f-49e4-9e76-7e48d76a3b3c
+                authProviderId:
+                  type: string
+                  example: oauth_1b21d3a03270
+                returnUrl:
+                  type: string
+                  example: /integrations?tab=triggers
+                dashboardOrigin:
+                  type: string
+                  example: https://app.live.gcp.fastn.ai
+                oauthProxyUrl:
+                  type: string
+                  example: https://oauth.live.fastn.ai
+              required:
+              - connectorId
+              - authMethodId
+              - authProviderId
+              - returnUrl
+              - dashboardOrigin
+              - oauthProxyUrl
+            example:
+              connectorId: 8de5d696-5289-4c9c-ade4-de918d019d06
+              authMethodId: 7195748d-a02f-49e4-9e76-7e48d76a3b3c
+              authProviderId: oauth_1b21d3a03270
+              returnUrl: /integrations?tab=triggers
+              dashboardOrigin: https://app.live.gcp.fastn.ai
+              oauthProxyUrl: https://oauth.live.fastn.ai
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/roles/{roleId}:
+    put:
+      tags:
+      - roles
+      operationId: putRolesRoleId
+      summary: PUT /api/v1/roles/{roleId}
+      parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Use a disposable seed role for automated testing - do not
+          point this at a real, in-use custom role since RBAC/BFLA scans will
+          overwrite its permissions on every run.
+        example: cr_mqt6p7sf_wr4i
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Partial update - at least one field must be present.
+              properties:
+                name:
+                  type: string
+                  example: POC Owner Role 001
+                description:
+                  type: string
+                  example: modified by enduser poc
+                permissions:
+                  type: object
+                  description: Map of resource name (e.g. connectors) to an actions
+                    list.
+                  example:
+                    connectors:
+                      actions:
+                      - read
+                      - create
+            example:
+              description: modified by enduser poc
+              permissions:
+                connectors:
+                  actions:
+                  - read
+                  - create
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - roles
+      operationId: deleteRolesRoleId
+      summary: DELETE /api/v1/roles/{roleId}
+      parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Intentionally left as a non-existent placeholder - this method
+          was not part of the verified BFLA findings, and pointing it at a real
+          role/seed role would destroy it on the first scan run.
+        example: role_abc123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/schedulers/{schedulerId}:
+    get:
+      tags:
+      - schedulers
+      operationId: getSchedulersSchedulerId
+      summary: GET /api/v1/schedulers/{schedulerId}
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+      - schedulers
+      operationId: putSchedulersSchedulerId
+      summary: PUT /api/v1/schedulers/{schedulerId}
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: tttrteteUUU
+                rate:
+                  type: object
+                timezone:
+                  type: string
+                  example: Asia/Calcutta
+                delayMinutes:
+                  type: integer
+                  example: 0
+                routes:
+                  type: array
+                  items:
+                    type: object
+                dlqConfiguration:
+                  type: object
+              required:
+              - name
+            example:
+              name: tttrteteUUU
+              rate:
+                value: 5
+                unit: minutes
+              timezone: Asia/Calcutta
+              delayMinutes: 0
+              routes:
+              - routeId: wrkfl1
+                headers: {}
+                payload: {}
+              dlqConfiguration:
+                maxRetries: 0
+                backoffStrategy: exponential
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - schedulers
+      operationId: deleteSchedulersSchedulerId
+      summary: DELETE /api/v1/schedulers/{schedulerId}
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Intentionally left as a non-existent placeholder - this method
+          was not part of the verified BFLA findings, and pointing it at the same
+          scheduler used by PUT/trigger would delete it and break those tests on
+          subsequent runs.
+        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/schedulers/{schedulerId}/trigger:
+    get:
+      tags:
+      - schedulers
+      operationId: getSchedulersSchedulerIdTrigger
+      summary: GET /api/v1/schedulers/{schedulerId}/trigger
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+      - schedulers
+      operationId: postSchedulersSchedulerIdTrigger
+      summary: POST /api/v1/schedulers/{schedulerId}/trigger
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 21ddc4df-0a64-43be-bffb-5eaab4fe952d
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/schedulers/{schedulerId}/stats:
+    get:
+      tags:
+      - schedulers
+      operationId: getSchedulersSchedulerIdStats
+      summary: GET /api/v1/schedulers/{schedulerId}/stats
+      parameters:
+      - name: schedulerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 94b6b9c8-fecc-4344-9ea3-3e77cd9eaa60
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/users/me/memberships:
+    get:
+      tags:
+      - users
+      operationId: getUsersMeMemberships
+      summary: GET /api/v1/users/me/memberships
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/widgets/{widgetId}:
+    delete:
+      tags:
+      - widgets
+      operationId: deleteWidgetsWidgetId
+      summary: DELETE /api/v1/widgets/{widgetId}
+      parameters:
+      - name: widgetId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: widget_abc123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/test:
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflowsTest
+      summary: POST /api/v1/workflows/test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: 'export default async function(ctx) { return { result:
+                    "Hello" }; }'
+                input:
+                  type: object
+                  example:
+                    userId: '12345'
+                    name: John Doe
+                timeoutMs:
+                  type: integer
+                  example: 60000
+              required:
+              - code
+            example:
+              code: 'export default async function(ctx) { return { result: "Hello"
+                }; }'
+              input:
+                userId: '12345'
+                name: John Doe
+              timeoutMs: 60000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}:
+    put:
+      tags:
+      - workflows
+      operationId: putWorkflowsWorkflowId
+      summary: PUT /api/v1/workflows/{workflowId}
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Wrkfl115
+                description:
+                  type: string
+                  example: Workflow description
+                code:
+                  type: string
+                enabled:
+                  type: boolean
+                  example: true
+                executionTier:
+                  type: string
+                  example: instant
+                timeoutMs:
+                  type: integer
+                  example: 60000
+                testCases:
+                  type: array
+                  items:
+                    type: object
+            example:
+              name: Wrkfl115
+              description: Workflow description
+              enabled: true
+              executionTier: instant
+              timeoutMs: 60000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+      - workflows
+      operationId: deleteWorkflowsWorkflowId
+      summary: DELETE /api/v1/workflows/{workflowId}
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_1fe4fa99b497
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/test:
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflowsWorkflowIdTest
+      summary: POST /api/v1/workflows/{workflowId}/test
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  example:
+                    userId: '12345'
+                    name: John Doe
+                    email: john.doe@example.com
+                    role: admin
+                    status: active
+            example:
+              input:
+                userId: '12345'
+                name: John Doe
+                email: john.doe@example.com
+                role: admin
+                status: active
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/publish:
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflowsWorkflowIdPublish
+      summary: POST /api/v1/workflows/{workflowId}/publish
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Fixed
+              required:
+              - message
+            example:
+              message: Fixed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/deploy:
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflowsWorkflowIdDeploy
+      summary: POST /api/v1/workflows/{workflowId}/deploy
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                env_id:
+                  type: string
+                  example: wenv_b8a1174523a8
+                version_id:
+                  type: string
+                  example: wv_88e93ce87911
+              required:
+              - env_id
+              - version_id
+            example:
+              env_id: wenv_b8a1174523a8
+              version_id: wv_88e93ce87911
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/generate-docs:
+    post:
+      tags:
+      - workflows
+      operationId: postWorkflowsWorkflowIdGenerateDocs
+      summary: POST /api/v1/workflows/{workflowId}/generate-docs
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/versions:
+    get:
+      tags:
+      - workflows
+      operationId: getWorkflowsWorkflowIdVersions
+      summary: GET /api/v1/workflows/{workflowId}/versions
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/deployments:
+    get:
+      tags:
+      - workflows
+      operationId: getWorkflowsWorkflowIdDeployments
+      summary: GET /api/v1/workflows/{workflowId}/deployments
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/workflows/{workflowId}/executions:
+    get:
+      tags:
+      - workflows
+      operationId: getWorkflowsWorkflowIdExecutions
+      summary: GET /api/v1/workflows/{workflowId}/executions
+      parameters:
+      - name: workflowId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: wf_de65cda670b2
+      - name: limit
+        in: query
+        required: true
+        schema:
+          type: integer
+        example: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+  /api/v1/users/{id}/role:
+    put:
+      tags:
+      - users
+      operationId: putUsersUserIdRole
+      summary: PUT /api/v1/users/{userId}/role
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 43dde5fa-19d7-41b9-a4ce-f267b19611fc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  example: operator
+              required:
+              - role
+            example:
+              role: operator
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token obtained from authentication
+security:
+- BearerAuth: []
